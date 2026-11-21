@@ -1,0 +1,33 @@
+name: tut03-lpg
+
+services:
+  memgraph:
+    image: memgraph/memgraph-mage:3.14.0
+    ports:
+      - "127.0.0.1:${MEMGRAPH_BOLT_PORT:-7687}:7687"
+      - "127.0.0.1:${MEMGRAPH_LOG_PORT:-7444}:7444"
+    volumes:
+      - mg_data:/var/lib/memgraph
+      - mg_log:/var/log/memgraph
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'RETURN 1;' | mgconsole || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  lab:
+    image: memgraph/lab:3.14.2
+    ports:
+      - "127.0.0.1:${MEMGRAPH_LAB_PORT:-3000}:3000"
+    depends_on:
+      memgraph:
+        condition: service_healthy
+    environment:
+      QUICK_CONNECT_MG_HOST: memgraph
+      QUICK_CONNECT_MG_PORT: "7687"
+      QUICK_CONNECT_MG_IS_ENCRYPTED: "false"
+
+volumes:
+  mg_data:
+  mg_log:

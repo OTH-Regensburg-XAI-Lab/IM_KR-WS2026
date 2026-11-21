@@ -1,0 +1,9 @@
+# Direct dependencies for the local Memgraph tutorial; Python 3.12 is recommended.
+# The pure-Python Neo4j driver connects to Memgraph over Bolt.
+# GQLAlchemy and pymgclient are unnecessary here; omitting them avoids
+# their native-client build dependencies on student machines.
+neo4j>=5.28,<7
+pandas>=2.2,<4
+jupyterlab>=4.3,<5
+ipykernel>=6.29,<8
+nbformat>=5.10,<6
